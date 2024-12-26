@@ -31,6 +31,6 @@ screen -S minecraft -d -m java -Xmx2G -Xms2G -jar minecraft_server.1.18.2.jar no
 # Wait for the server to start
 sleep 10
 
-# Fetch and display the public IP address and port
-PUBLIC_IP=$(curl -s ifconfig.me)
+# Fetch and display the public IP address and port using wget as an alternative method
+PUBLIC_IP=$(wget -qO- http://ifconfig.me)
 echo "Minecraft server is running at ${PUBLIC_IP}:${PORT}"
