@@ -10,8 +10,9 @@
             color: #fff;
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
         }
@@ -19,6 +20,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-bottom: 20px;
         }
         .console {
             background-color: #2e536f;
@@ -31,22 +33,22 @@
             max-height: 50vh;
             color: #00ff00;
             font-family: monospace;
-            margin-bottom: 20px;
             white-space: pre-wrap;
+            margin-bottom: 20px;
         }
-        .input-box {
+        .input-container {
             display: flex;
             width: 80%;
             max-width: 800px;
         }
-        input[type="text"] {
+        .input-box {
             flex: 1;
             padding: 10px;
             border-radius: 15px 0 0 15px;
             border: none;
             outline: none;
         }
-        button {
+        .input-box button {
             padding: 10px;
             border-radius: 0 15px 15px 0;
             border: none;
@@ -62,9 +64,9 @@
         <div class="console" id="console-output">
             Starting Minecraft server setup...
         </div>
-        <div class="input-box">
-            <input type="text" id="command-input" placeholder="Type your command here..." />
-            <button onclick="sendCommand()">Send</button>
+        <div class="input-container">
+            <input type="text" id="command-input" class="input-box" placeholder="Type your command here..." />
+            <button class="input-box" onclick="sendCommand()">Send</button>
         </div>
     </div>
 
