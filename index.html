@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Server Console</title>
+    <style>
+        body {
+            background-color: #1e3d59;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .console-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .console {
+            background-color: #2e536f;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 15px 5px #00ffff;
+            width: 80%;
+            max-width: 800px;
+            overflow-y: auto;
+            max-height: 50vh;
+            color: #00ff00;
+            font-family: monospace;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+        .input-box {
+            display: flex;
+            width: 80%;
+            max-width: 800px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border-radius: 15px 0 0 15px;
+            border: none;
+            outline: none;
+        }
+        button {
+            padding: 10px;
+            border-radius: 0 15px 15px 0;
+            border: none;
+            background-color: #00ffff;
+            color: #1e3d59;
+            cursor: pointer;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="console-container">
+        <div class="console" id="console-output">
+            Starting Minecraft server setup...
+        </div>
+        <div class="input-box">
+            <input type="text" id="command-input" placeholder="Type your command here..." />
+            <button onclick="sendCommand()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:8080');
+        const consoleOutput = document.getElementById('console-output');
+        const commandInput = document.getElementById('command-input');
+
+        socket.onmessage = function(event) {
+            const message = document.createElement('div');
+            message.textContent = event.data;
+            consoleOutput.appendChild(message);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+
+        function sendCommand() {
+            const command = commandInput.value;
+            if (command.trim() === '') return;
+
+            socket.send(command);
+            commandInput.value = '';
+        }
+
+        function appendToConsole(message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            consoleOutput.appendChild(messageElement);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        async function fetchServerAddress() {
+            try {
+                const response = await fetch('https://ifconfig.me/ip');
+                const ip = await response.text();
+                const port = 2443; // Assuming a fixed port for demonstration
+                appendToConsole(`Server Address: ${ip.trim()}:${port}`);
+            } catch (error) {
+                appendToConsole('Error fetching IP');
+            }
+        }
+
+        async function fetchServerVersion() {
+            socket.send('version'); // Request the server version from the backend
+        }
+
+        socket.onopen = () => {
+            socket.send('setup_server');
+        };
+
+        function simulateServerCreation() {
+            fetchServerAddress();
+            fetchServerVersion();
+        }
+
+        simulateServerCreation();
+    </script>
+</body>
+</html>
