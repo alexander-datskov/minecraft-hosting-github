@@ -27,7 +27,7 @@ async function setupMinecraftServer() {
 # Define the port number
 PORT=2443
 
-# Update and install Java
+# Update the package list and install Java
 sudo apt-get update
 sudo apt-get install -y openjdk-17-jdk
 
@@ -55,9 +55,9 @@ screen -S minecraft -d -m java -Xmx2G -Xms2G -jar minecraft_server.1.18.2.jar no
 # Wait for the server to start
 sleep 10
 
-# Fetch and display the public IP address and port
-PUBLIC_IP=$(curl -s ifconfig.me)
-echo "Minecraft server is running at \${PUBLIC_IP}:${PORT}"
+# Fetch and display the public IP address and port using wget as an alternative method
+PUBLIC_IP=$(wget -qO- http://ifconfig.me)
+echo "Minecraft server is running at ${PUBLIC_IP}:${PORT}"
         `;
         fs.writeFileSync('setup.sh', setupScript);
 
